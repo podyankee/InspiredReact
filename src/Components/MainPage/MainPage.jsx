@@ -1,17 +1,21 @@
-// import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Container } from '../Layout/Container/Container';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { fetchGoods } from '../../features/goodsSlice';
 import s from './MainPage.module.scss';
 import { Product } from '../Product/Product';
+import { setActiveGender } from '../../features/navigationSlice.js';
 
-export const MainPage = ({ gender = 'women' }) => {
-	// const { category } = useParams();
+export const MainPage = () => {
+	const { gender, category } = useParams();
 	const dispatch = useDispatch();
 	const { goodsList } = useSelector(state => state.goods);
+	const { activeGender, categories } = useSelector(state => state.navigation);
 
-	console.log(goodsList);
+	useEffect(() => {
+		dispatch(setActiveGender(gender));
+	}, [gender, dispatch]);
 
 	useEffect(() => {
 		dispatch(fetchGoods(gender));
