@@ -83,3 +83,11 @@
 		line-height: 18px;
 	}
 }
+
+.like {
+	color: transparent;
+
+	&:hover {
+		color: tomato;
+	}
+}
