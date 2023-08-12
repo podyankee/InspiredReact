@@ -11,16 +11,18 @@ import { Count } from '../Count/Count';
 import { ProductSize } from './ProductSize/ProductSize';
 import { Goods } from '../Goods/Goods';
 import { fetchCategory } from '../../features/goodsSlice';
+import { addToCart } from '../../features/cartSlice';
 import { BtnLike } from '../BtnLike/BtnLike';
 
 export const ProductPage = () => {
 	const dispatch = useDispatch();
 	const { id } = useParams();
 	const { product } = useSelector(state => state.product);
-	const { gender, category } = product;
+	const { gender, category, colors } = product;
 	const [count, setCount] = useState(1);
 	const [selectedColor, setSelectedColor] = useState('');
 	const [selectedSize, setSelectedSize] = useState('');
+	const { colorList } = useSelector(state => state.color);
 
 	const handleIncrement = () => {
 		setCount(prevCount => prevCount + 1);
@@ -46,6 +48,12 @@ export const ProductPage = () => {
 		dispatch(fetchCategory({ gender, category, count: 4, top: true, exclude: id }));
 	}, [gender, category, dispatch, id]);
 
+	useEffect(() => {
+		if (colorList?.length && colors?.length) {
+			setSelectedColor(colorList.find(color => color.id === colors[0]).title);
+		}
+	}, [colorList, colors]);
+
 	return (
 		<>
 			<section className={s.card}>
@@ -55,7 +63,19 @@ export const ProductPage = () => {
 						src={`${API_URL}${product.pic}`}
 						alt={`${product.title} ${product.description}`}
 					/>
-					<form className={s.content}>
+					<form
+						className={s.content}
+						onSubmit={e => {
+							e.preventDefault();
+							dispatch(
+								addToCart({
+									id,
+									color: selectedColor,
+									size: selectedSize,
+									count,
+								}),
+							);
+						}}>
 						<h2 className={s.title}>{product.title}</h2>
 
 						<p className={s.price}>руб {product.price}</p>
@@ -66,7 +86,7 @@ export const ProductPage = () => {
 						<div className={s.color}>
 							<p className={cn(s.subtitle, s.colorTile)}>Цвет</p>
 							<ColorList
-								colors={product.colors}
+								colors={colors}
 								selectedColor={selectedColor}
 								handleColorChange={handleColorChange}
 							/>
