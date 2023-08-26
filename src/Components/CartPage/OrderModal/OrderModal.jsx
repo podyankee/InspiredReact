@@ -1,7 +1,7 @@
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import s from './OrderModal.module.scss';
-import { API_URL } from '../../../const';
-import { clearCart } from '../../../features/cartSlice';
+import { API_URL } from '../../../const.js';
+import { clearCart } from '../../../features/cartSlice.js';
 
 export const OrderModal = () => {
 	const {
@@ -14,18 +14,20 @@ export const OrderModal = () => {
 		dispatch(clearCart());
 	};
 
-	const handleModalClick = e => {
-		e.stopPropagation();
+	const handleModalClick = ev => {
+		ev.stopPropagation();
 	};
 
 	return (
 		<div className={s.modal} onClick={handleCloseModal}>
 			<div className={s.body} onClick={handleModalClick}>
 				<h2 className={s.title}>Заказ оформлен №{id}</h2>
+
 				<div className={s.description}>
 					<p>Спасибо за выбор нашего магазина!</p>
 					<p>Здесь вы можете посмотреть все детали вашего заказа.</p>
 				</div>
+
 				<ul className={s.customer}>
 					<li className={s.customerItem}>
 						<span className={s.customerTitle}>Получатель</span>
@@ -52,6 +54,7 @@ export const OrderModal = () => {
 						</span>
 					</li>
 				</ul>
+
 				<ul className={s.goods}>
 					{order.map(item => {
 						const product = goodsList.find(product => product.id === item.id);
@@ -63,10 +66,12 @@ export const OrderModal = () => {
 						);
 					})}
 				</ul>
+
 				<div className={s.total}>
 					<p>Итого:</p>
 					<p>руб {totalPrice}</p>
 				</div>
+
 				<button className={s.close} onClick={handleCloseModal}></button>
 			</div>
 		</div>
