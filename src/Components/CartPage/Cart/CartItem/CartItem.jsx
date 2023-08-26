@@ -23,7 +23,7 @@ export const CartItem = ({ id, color, size, count, goodsList }) => {
 			<img className={s.image} src={`${API_URL}${item?.pic}`} alt={item?.title} />
 			<div className={s.content}>
 				<h3 className={s.title}>{item?.title}</h3>
-				<p className={s.price}>{item?.price}</p>
+				<p className={s.price}>{item?.price} руб</p>
 				<div className={s.vendorCode}>
 					<span className={s.subtitle}>Артикул</span>
 					<span>{id}</span>
@@ -49,7 +49,9 @@ export const CartItem = ({ id, color, size, count, goodsList }) => {
 				className={s.count}
 				count={count}
 				handleDecrement={() => {
-					handleCountChange(count - 1);
+					if (count > 1) {
+						handleCountChange(count - 1);
+					}
 				}}
 				handleIncrement={() => {
 					handleCountChange(count + 1);
